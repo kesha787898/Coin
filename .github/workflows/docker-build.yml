@@ -13,6 +13,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build order_collector --tag order_collector:$(date +%s)
+      - uses: actions/checkout@v3
+
+      - name: Login to Heroku Container registry
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: docker login --username=_ --password=${{ secrets.HEROKU_API_KEY }} registry.heroku.com
+
+      - name: Build the Docker image
+        run: docker build order_collector -t registry.heroku.com/coin-order-collector/coin-order-collector .
+
+      - name: Push the Docker image
+        run: docker push registry.heroku.com/coin-order-collector/coin-order-collector
+
+
+
