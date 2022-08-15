@@ -9,24 +9,24 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 import schedule
 
-is_stable = False
+from config import is_stable, conn_data
 
-engine = create_engine("postgresql://rxkumqwl:4SWbeuIQTKlzQx2P3Tn8TGbulaaX3xGh@abul.db.elephantsql.com/rxkumqwl",
-                       echo=True, future=True)
+engine = create_engine(conn_data, echo=True, future=True)
 
 Base = declarative_base()
 
 
 # Todo можно использовать только значения из списка.Подумать как сделать
-class Adv(Base):
+class Order(Base):
     __tablename__ = "prices"
     id = Column(Integer, primary_key=True)
     price = Column(Float, primary_key=False)
     created_at = Column(DateTime, default=datetime.now)
-    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    #updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
     asset = Column(String, primary_key=False)
     fiat = Column(String, primary_key=False)
     type = Column(String, primary_key=False)
+
 
 if not is_stable:
     Base.metadata.drop_all(engine)
@@ -53,7 +53,7 @@ def get_page_advertisments(asset, fiat, type, banks, page=0):
         return advs
     for i in resp_data:
         price = float(i['adv']['price'])
-        adv = Adv(price=price, asset=asset, fiat=fiat, type=type)
+        adv = Order(price=price, asset=asset, fiat=fiat, type=type)
         advs.append(adv)
     return advs
 
