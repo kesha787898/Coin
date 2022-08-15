@@ -22,7 +22,7 @@ class Order(Base):
     id = Column(Integer, primary_key=True)
     price = Column(Float, primary_key=False)
     created_at = Column(DateTime, default=datetime.now)
-    #updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    # updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
     asset = Column(String, primary_key=False)
     fiat = Column(String, primary_key=False)
     type = Column(String, primary_key=False)
@@ -58,15 +58,16 @@ def get_page_advertisments(asset, fiat, type, banks, page=0):
     return advs
 
 
-def get_all_advs(asset, fiat, type):
+def get_all_advs(asset, fiat, type, banks=None):
     res = []
     page = 1
-    if fiat == 'RUB':
-        banks = ['Tinkoff']
-    elif fiat in ['USD', 'EUR']:
-        banks = ['KaspiBank', 'AltynBank']
-    else:
-        raise RuntimeError('err')
+    if not banks:
+        if fiat == 'RUB':
+            banks = ['Tinkoff']
+        elif fiat in ['USD', 'EUR']:
+            banks = ['KaspiBank', 'AltynBank']
+        else:
+            raise RuntimeError('err')
     while True:
         advs = get_page_advertisments(asset=asset, fiat=fiat, type=type, page=page, banks=banks)
         if advs:
