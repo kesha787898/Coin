@@ -26,5 +26,8 @@ jobs:
       - name: Push the Docker image
         run: docker push registry.heroku.com/coin-order-collector/coin-order-collector
 
+      - name: Push the Docker image
+        run: heroku container:release coin-order-collector --app coin-order-collector
+
 
 
