@@ -21,7 +21,7 @@ jobs:
         run: docker login --username=_ --password=${{ secrets.HEROKU_API_KEY }} registry.heroku.com
 
       - name: Build the Docker image
-        run: docker build  -t registry.heroku.com/coin-dashboard-courses/coin-dashboard-courses coin-dashboard-courses
+        run: docker build  -t registry.heroku.com/coin-dashboard-courses/coin-dashboard-courses coin-dashboard
 
       - name: Push the Docker image
         run: docker push registry.heroku.com/coin-dashboard-courses/coin-dashboard-courses
