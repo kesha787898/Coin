@@ -21,15 +21,15 @@ jobs:
         run: docker login --username=_ --password=${{ secrets.HEROKU_API_KEY }} registry.heroku.com
 
       - name: Build the Docker image
-        run: docker build  -t registry.heroku.com/coin-dashboard/coin-dashboard coin-dashboard
+        run: docker build  -t registry.heroku.com/coin-dashboard-courses/coin-dashboard-courses coin-dashboard-courses
 
       - name: Push the Docker image
-        run: docker push registry.heroku.com/coin-dashboard/coin-dashboard
+        run: docker push registry.heroku.com/coin-dashboard-courses/coin-dashboard-courses
 
       - name: Deploy app to heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:release coin-dashboard --app coin-dashboard
+        run: heroku container:release coin-dashboard-courses --app coin-dashboard-courses
 
 
 
