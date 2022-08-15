@@ -1,3 +1,5 @@
+import os
+
 import dash
 import dash_html_components as html
 import plotly.graph_objects as go
@@ -44,4 +46,6 @@ def graph_update(dropdown_value):
 
 
 if __name__ == '__main__':
-    app.run_server(port=80)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
+    app.run_server(port=port,host='0.0.0.0')
