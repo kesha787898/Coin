@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Order collectors ci/cd
 
 on:
   push:

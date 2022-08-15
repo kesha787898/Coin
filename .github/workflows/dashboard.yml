@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Dashboard ci/cd
 
 on:
   push:
