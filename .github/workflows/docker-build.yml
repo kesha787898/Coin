@@ -21,7 +21,7 @@ jobs:
         run: docker login --username=_ --password=${{ secrets.HEROKU_API_KEY }} registry.heroku.com
 
       - name: Build the Docker image
-        run: docker build order_collector -t registry.heroku.com/coin-order-collector/coin-order-collector .
+        run: docker build  -t registry.heroku.com/coin-order-collector/coin-order-collector order_collector
 
       - name: Push the Docker image
         run: docker push registry.heroku.com/coin-order-collector/coin-order-collector
