@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 import schedule
 
 from config import is_stable, conn_data
-
+print("App is started")
 engine = create_engine(conn_data, echo=True, future=True)
 
 Base = declarative_base()
@@ -35,6 +35,8 @@ Base.metadata.create_all(engine, checkfirst=True)
 
 
 def get_page_advertisments(asset, fiat, type, banks, page=0):
+    print("get_page_advertisments")
+
     data = {
         "asset": asset,
         "fiat": fiat,
@@ -59,6 +61,7 @@ def get_page_advertisments(asset, fiat, type, banks, page=0):
 
 
 def get_all_advs(asset, fiat, type):
+    print("get_all_advs")
     res = []
     page = 1
     if fiat == 'RUB':
@@ -77,6 +80,7 @@ def get_all_advs(asset, fiat, type):
 
 
 def dump():
+    print("dump")
     with Session(engine) as session:
         all_advs = get_all_advs("USDT", "RUB", 'BUY')
         session.add_all(all_advs)
