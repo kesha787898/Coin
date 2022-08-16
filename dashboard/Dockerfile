@@ -5,6 +5,7 @@ WORKDIR dashboard
 RUN pip install -r requirements.txt
 EXPOSE 8050
 RUN ls
-CMD python dashboard.py
+CMD gunicorn --bind 0.0.0.0:8080 dashboard:server --log-level DEBUG --timeout 20
+
 
 
