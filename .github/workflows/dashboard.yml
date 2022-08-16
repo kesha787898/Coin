@@ -3,8 +3,12 @@ name: Dashboard ci/cd
 on:
   push:
     branches: [ "master" ]
+    paths:
+      - 'dashboard/**'
   pull_request:
     branches: [ "master" ]
+    paths:
+      - 'dashboard/**'
 
 jobs:
 
@@ -30,6 +34,3 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: heroku container:release coin-dashboard-courses --app coin-dashboard-courses
-
-
-
