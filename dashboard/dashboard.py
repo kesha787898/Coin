@@ -45,7 +45,6 @@ def graph_update(dropdown_value):
     return fig
 
 
-port = int(os.environ.get('PORT', 8050))
-print(port)
 if __name__ == "__main__":
+    port = int(os.environ.get('PORT', 8050))
     app.run(host='0.0.0.0', port=port)
