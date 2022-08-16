@@ -8,13 +8,12 @@ from dash.dependencies import Input, Output
 from sqlalchemy import create_engine
 import pandas as pd
 engine = create_engine("postgresql://rxkumqwl:4SWbeuIQTKlzQx2P3Tn8TGbulaaX3xGh@abul.db.elephantsql.com/rxkumqwl",
-                       echo=True, future=True)
+                       echo=False, future=True)
 df = pd.read_sql('prices', engine.connect())
 df = df.groupby(pd.Grouper(key='created_at', freq='60s')).agg({'price': ['mean', 'min', 'max']})
 df.columns = [' '.join(col).strip() for col in df.columns.values]
 df = df.reset_index(level=0)
-app = dash.Dash()
-server = app.server
+app = dash.Dash(__name__)
 app.layout = html.Div(id='parent', children=[
     html.H1(id='H1', children='Styling using html components', style={'textAlign': 'center', \
                                                                       'marginTop': 40, 'marginBottom': 40}),
@@ -43,6 +42,6 @@ def graph_update(dropdown_value):
                       )
     return fig
 
-
 if __name__ == "__main__":
-    app.run_server(host="0.0.0.0", port=8050, debug=True)
+    port = int(os.environ.get('PORT', 8050))
+    app.run(host='0.0.0.0', port=port)
