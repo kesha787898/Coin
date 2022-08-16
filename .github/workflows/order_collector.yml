@@ -34,6 +34,7 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: heroku container:release web --app coin-order-collector
+
       - name: Scale heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}

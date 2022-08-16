@@ -3,7 +3,6 @@ ARG port
 RUN mkdir dashboard
 COPY . /dashboard
 WORKDIR dashboard
-RUN pip install -r requirements.txt
 ENV PORT=$port
 EXPOSE $PORT
 RUN ls
