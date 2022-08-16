@@ -1,5 +1,10 @@
 FROM python:3
-ADD . /
+RUN mkdir dashboard
+ADD . /dashboard
+WORKDIR dashboard
 RUN pip install -r requirements.txt
-#CMD [ "python", "./dashboard.py" ]
+EXPOSE 8050
+RUN ls
 CMD gunicorn --bind 0.0.0.0:8050 dashboard:server
+
+
