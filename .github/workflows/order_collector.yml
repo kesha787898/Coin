@@ -5,10 +5,13 @@ on:
     branches: [ "master" ]
     paths:
       - 'order_collector/**'
+      - '.github/order_collector.yml'
+
   pull_request:
     branches: [ "master" ]
     paths:
       - 'order_collector/**'
+      - '.github/order_collector.yml'
 
 jobs:
 
