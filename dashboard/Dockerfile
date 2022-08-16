@@ -5,6 +5,4 @@ WORKDIR dashboard
 RUN pip install -r requirements.txt
 EXPOSE 8050
 RUN ls
-CMD gunicorn dashboard:server
-
-
+CMD gunicorn --bind 0.0.0.0:$PORT dashboard:server

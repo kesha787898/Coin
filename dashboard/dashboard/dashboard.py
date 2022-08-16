@@ -14,6 +14,7 @@ df = df.groupby(pd.Grouper(key='created_at', freq='60s')).agg({'price': ['mean',
 df.columns = [' '.join(col).strip() for col in df.columns.values]
 df = df.reset_index(level=0)
 app = dash.Dash()
+server = app.server
 app.layout = html.Div(id='parent', children=[
     html.H1(id='H1', children='Styling using html components', style={'textAlign': 'center', \
                                                                       'marginTop': 40, 'marginBottom': 40}),
@@ -43,8 +44,5 @@ def graph_update(dropdown_value):
     return fig
 
 
-server = app.server
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 8050))
-    app.run(host='0.0.0.0', port=port)
-    app.run_server(port=port, host='0.0.0.0')
+if __name__ == "__main__":
+    app.run_server(host="0.0.0.0", port=8050, debug=True)
