@@ -3,8 +3,12 @@ name: Order collectors ci/cd
 on:
   push:
     branches: [ "master" ]
+    paths:
+      - 'order_collector/**'
   pull_request:
     branches: [ "master" ]
+    paths:
+      - 'order_collector/**'
 
 jobs:
 
@@ -29,7 +33,11 @@ jobs:
       - name: Deploy app to heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:release coin-order-collector --app coin-order-collector
+        run: heroku container:release web --app coin-order-collector
+      - name: Scale heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku ps:scale coin-dashboard-courses=1 --app coin-dashboard-courses
 
 
 
