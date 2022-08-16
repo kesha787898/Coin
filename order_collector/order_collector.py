@@ -20,9 +20,9 @@ Base = declarative_base()
 class Order(Base):
     __tablename__ = "prices"
     id = Column(Integer, primary_key=True)
-    price = Column(Float, primary_key=False)
     created_at = Column(DateTime, default=datetime.now)
-    # updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    price = Column(Float, primary_key=False)
+    tradable_quantity = Column(Float, primary_key=False)
     asset = Column(String, primary_key=False)
     fiat = Column(String, primary_key=False)
     type = Column(String, primary_key=False)
@@ -53,7 +53,8 @@ def get_page_advertisments(asset, fiat, type, banks, page=0):
         return advs
     for i in resp_data:
         price = float(i['adv']['price'])
-        adv = Order(price=price, asset=asset, fiat=fiat, type=type)
+        tradable_quantity = i['adv']['tradableQuantity']
+        adv = Order(price=price, asset=asset, fiat=fiat, type=type, tradable_quantity=tradable_quantity)
         advs.append(adv)
     return advs
 
