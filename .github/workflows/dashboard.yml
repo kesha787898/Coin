@@ -5,13 +5,11 @@ on:
     branches: [ "master" ]
     paths:
       - 'dashboard/**'
-      - '.github/dashboard.yml'
 
   pull_request:
     branches: [ "master" ]
     paths:
       - 'dashboard/**'
-      - '.github/dashboard.yml'
 
 jobs:
 
