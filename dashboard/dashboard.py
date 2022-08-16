@@ -16,6 +16,7 @@ df.columns = [' '.join(col).strip() for col in df.columns.values]
 df = df.reset_index(level=0)
 app = dash.Dash(__name__)
 server = app.server
+
 app.layout = html.Div(id='parent', children=[
     html.H1(id='H1', children='Styling using html components', style={'textAlign': 'center',
                                                                       'marginTop': 40, 'marginBottom': 40}),
