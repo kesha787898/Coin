@@ -5,11 +5,13 @@ on:
     branches: [ "master" ]
     paths:
       - 'order_collector/**'
+      - '.github/workflows/order_collector.yaml'
 
   pull_request:
     branches: [ "master" ]
     paths:
       - 'order_collector/**'
+      - '.github/workflows/order_collector.yaml'
 
 jobs:
 
@@ -26,7 +28,7 @@ jobs:
         run: docker login --username=_ --password=${{ secrets.HEROKU_API_KEY }} registry.heroku.com
 
       - name: Build the Docker image
-        run: docker build  -t registry.heroku.com/coin-order-collector/coin-order-collector order_collector
+        run: docker build  -t registry.heroku.com/coin-order-collector/coin-order-collector order_collector --build-arg BD_CONNECTION=${{ secrets.BD_CONNECTION }}
 
       - name: Push the Docker image
         run: docker push registry.heroku.com/coin-order-collector/coin-order-collector
