@@ -5,15 +5,14 @@ on:
     branches: [ "master" ]
     paths:
       - 'dashboard/**'
-      - '.github/workflows/dashboard.yaml'
+      - '.github/workflows/dashboard.yml'
 
   pull_request:
     branches: [ "master" ]
     paths:
       - 'dashboard/**'
-      - '.github/workflows/dashboard.yaml'
-
-jobs:
+      - '.github/workflows/dashboard.yml'
+ jobs:
 
   build:
 
