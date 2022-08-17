@@ -7,7 +7,7 @@ import dash_core_components as dcc
 from dash.dependencies import Input, Output
 from sqlalchemy import create_engine
 import pandas as pd
-
+print(os.environ)
 engine = create_engine(os.environ.get("BD_CONNECTION"), echo=False, future=True)
 df = pd.read_sql('prices', engine.connect())
 df = df.groupby(pd.Grouper(key='created_at', freq='60s')).agg({'price': ['mean', 'min', 'max']})

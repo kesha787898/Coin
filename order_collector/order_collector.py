@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 import schedule
 
 from config import is_stable
-
+print(os.environ)
 engine = create_engine(os.environ.get("BD_CONNECTION"), echo=True, future=True)
 
 Base = declarative_base()
