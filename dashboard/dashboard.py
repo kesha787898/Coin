@@ -8,7 +8,7 @@ from dash.dependencies import Input, Output
 from sqlalchemy import create_engine
 import pandas as pd
 print(os.environ)
-engine = create_engine(os.environ.get("BD_CONNECTION"), echo=False, future=True)
+engine = create_engine("postgresql://fezjdnvz:TuwZaCWfkD2xz3QTVhf1wOSQ6DZ9hh3x@abul.db.elephantsql.com/fezjdnvz", echo=True, future=True)
 df = pd.read_sql('prices', engine.connect())
 df = df.groupby(pd.Grouper(key='created_at', freq='60s')).agg({'price': ['mean', 'min', 'max']})
 df.columns = [' '.join(col).strip() for col in df.columns.values]
