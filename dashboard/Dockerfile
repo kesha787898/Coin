@@ -1,9 +1,11 @@
 FROM python:3
 ARG port
+ARG BD_CONNECTION
+ENV PORT=$port
+ENV BD_CONNECTION=$BD_CONNECTION
 RUN mkdir dashboard
 COPY . /dashboard
 WORKDIR dashboard
-ENV PORT=$port
 EXPOSE $PORT
 RUN ls
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils \

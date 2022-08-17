@@ -1,4 +1,5 @@
 import json
+import os
 from datetime import datetime
 
 import requests
@@ -9,9 +10,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 import schedule
 
-from config import is_stable, conn_data
+from config import is_stable
 
-engine = create_engine(conn_data, echo=True, future=True)
+engine = create_engine(os.environ.get("BD_CONNECTION"), echo=True, future=True)
 
 Base = declarative_base()
 
