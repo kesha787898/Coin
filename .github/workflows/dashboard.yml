@@ -12,7 +12,7 @@ on:
     paths:
       - 'dashboard/**'
       - '.github/workflows/dashboard.yml'
- jobs:
+jobs:
 
   build:
 
