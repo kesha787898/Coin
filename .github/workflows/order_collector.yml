@@ -36,12 +36,12 @@ jobs:
       - name: Deploy app to heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:release web --app coin-order-collector
+        run: heroku container:release coin-dashboard-courses --app coin-order-collector
 
       - name: Scale heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku ps:scale web=1 --app coin-dashboard-courses
+        run: heroku ps:scale coin-dashboard-courses=1 --app coin-dashboard-courses
 
 
 
