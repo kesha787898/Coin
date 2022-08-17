@@ -7,12 +7,20 @@ import dash_core_components as dcc
 from dash.dependencies import Input, Output
 from sqlalchemy import create_engine
 import pandas as pd
-print(os.environ)
-engine = create_engine("postgresql://fezjdnvz:TuwZaCWfkD2xz3QTVhf1wOSQ6DZ9hh3x@abul.db.elephantsql.com/fezjdnvz", echo=True, future=True)
+
+engine = create_engine("postgresql://fezjdnvz:TuwZaCWfkD2xz3QTVhf1wOSQ6DZ9hh3x@abul.db.elephantsql.com/fezjdnvz",
+                       echo=True, future=True)
 df = pd.read_sql('prices', engine.connect())
-df = df.groupby(pd.Grouper(key='created_at', freq='60s')).agg({'price': ['mean', 'min', 'max']})
-df.columns = [' '.join(col).strip() for col in df.columns.values]
+df['weighted_price'] = df['price'] * df['tradable_quantity']
+df = df.groupby(pd.Grouper(key='created_at', freq='60s')).agg({'price': ['min', 'max'],
+                                                               'tradable_quantity': ['sum'],
+                                                               'weighted_price': ['sum']})
+
+df.columns = [' '.join(col).strip().replace(' ', '_') for col in df.columns.values]
 df = df.reset_index(level=0)
+df = df.rename(columns={"tradable_quantity_sum": "price_quantity"})
+
+df['weighted_price_mean'] = df['weighted_price_sum'] / df['price_quantity']
 app = dash.Dash(__name__)
 server = app.server
 
@@ -22,11 +30,12 @@ app.layout = html.Div(id='parent', children=[
 
     dcc.Dropdown(id='dropdown',
                  options=[
-                     {'label': 'mean', 'value': 'mean'},
-                     {'label': 'min', 'value': 'min'},
-                     {'label': 'max', 'value': 'max'},
+                     {'label': 'weighted_price_mean', 'value': 'weighted_price_mean'},
+                     {'label': 'price_min', 'value': 'price_min'},
+                     {'label': 'price_max', 'value': 'price_max'},
+                     {'label': 'price_quantity', 'value': 'price_quantity'},
                  ],
-                 value='mean'),
+                 value='price_min'),
     dcc.Graph(id='bar_plot')
 ])
 
@@ -34,13 +43,13 @@ app.layout = html.Div(id='parent', children=[
 @app.callback(Output(component_id='bar_plot', component_property='figure'),
               [Input(component_id='dropdown', component_property='value')])
 def graph_update(dropdown_value):
-    fig = go.Figure([go.Scatter(x=df['created_at'], y=df[f"price {dropdown_value}"],
+    fig = go.Figure([go.Scatter(x=df['created_at'], y=df[f"{dropdown_value}"],
                                 line=dict(color='firebrick', width=4))
                      ])
 
     fig.update_layout(title='Stock prices over time',
                       xaxis_title='Dates',
-                      yaxis_title='Prices'
+                      yaxis_title='Values'
                       )
     return fig
 
