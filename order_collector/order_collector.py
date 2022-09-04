@@ -85,6 +85,6 @@ def dump():
         session.commit()
 
 
-schedule.every(10).seconds.do(dump)
+schedule.every(300).seconds.do(dump)
 while True:
     schedule.run_pending()
