@@ -103,7 +103,7 @@ def run():
 server = Flask(__name__)
 
 
-@server.route("/health_check")
+@server.route("/")
 def health_check():
     return "started"
 
