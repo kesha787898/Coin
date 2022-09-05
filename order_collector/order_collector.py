@@ -10,7 +10,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 import schedule
 import logging
-from config import is_stable
+from config import is_stable, dump_frequency_sec
 
 engine = create_engine(os.environ.get("BD_CONNECTION"), echo=True, future=True)
 
@@ -94,6 +94,6 @@ def dump():
         logging.debug("Commited to DB")
 
 
-schedule.every(300).seconds.do(dump)
+schedule.every(dump_frequency_sec).seconds.do(dump)
 while True:
     schedule.run_pending()
