@@ -27,17 +27,17 @@ jobs:
         run: docker login --username=_ --password=${{ secrets.HEROKU_API_KEY }} registry.heroku.com
 
       - name: Build the Docker image
-        run: docker build  -t registry.heroku.com/coin-dashboard-courses/coin-dashboard-courses dashboard --build-arg BD_CONNECTION=${{ secrets.BD_CONNECTION }}
+        run: docker build  -t registry.heroku.com/coin-dashboard-courses/web dashboard --build-arg BD_CONNECTION=${{ secrets.BD_CONNECTION }}
 
       - name: Push the Docker image
-        run: docker push registry.heroku.com/coin-dashboard-courses/coin-dashboard-courses
+        run: docker push registry.heroku.com/coin-dashboard-courses/web
 
       - name: Deploy app to heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:release coin-dashboard-courses --app coin-dashboard-courses
+        run: heroku container:release web --app coin-dashboard-courses
 
       - name: Scale heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku ps:scale coin-dashboard-courses=1 --app coin-dashboard-courses
+        run: heroku ps:scale web=1 --app coin-dashboard-courses

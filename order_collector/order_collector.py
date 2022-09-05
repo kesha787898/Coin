@@ -9,8 +9,8 @@ from sqlalchemy.orm import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 import schedule
-
-from config import is_stable
+import logging
+from config import is_stable, dump_frequency_sec
 
 engine = create_engine(os.environ.get("BD_CONNECTION"), echo=True, future=True)
 
@@ -30,9 +30,13 @@ class Order(Base):
 
 
 if not is_stable:
+    logging.debug("Dropping DB")
     Base.metadata.drop_all(engine)
+    logging.debug("Databases DB")
 
+logging.debug("Creating DB")
 Base.metadata.create_all(engine, checkfirst=True)
+logging.debug("Database DB")
 
 
 def get_page_advertisments(asset, fiat, type, banks, page=0):
@@ -81,11 +85,15 @@ def get_all_advs(asset, fiat, type, banks=None):
 
 def dump():
     with Session(engine) as session:
+        logging.debug("Start committing to DB")
+
         all_advs = get_all_advs("USDT", "RUB", 'BUY')
+        logging.debug(f"adding {all_advs} advs")
         session.add_all(all_advs)
         session.commit()
+        logging.debug("Commited to DB")
 
 
-schedule.every(10).seconds.do(dump)
+schedule.every(dump_frequency_sec).seconds.do(dump)
 while True:
     schedule.run_pending()
