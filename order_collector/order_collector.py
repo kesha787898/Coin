@@ -1,8 +1,10 @@
 import json
 import os
 from datetime import datetime
+from multiprocessing import Process
 
 import requests
+from flask import Flask
 from sqlalchemy import Column, DateTime, String
 from sqlalchemy import Integer, Float
 from sqlalchemy.orm import declarative_base
@@ -27,16 +29,6 @@ class Order(Base):
     asset = Column(String, primary_key=False)
     fiat = Column(String, primary_key=False)
     type = Column(String, primary_key=False)
-
-
-if not is_stable:
-    logging.debug("Dropping DB")
-    Base.metadata.drop_all(engine)
-    logging.debug("Databases DB")
-
-logging.debug("Creating DB")
-Base.metadata.create_all(engine, checkfirst=True)
-logging.debug("Database DB")
 
 
 def get_page_advertisments(asset, fiat, type, banks, page=0):
@@ -94,6 +86,30 @@ def dump():
         logging.debug("Commited to DB")
 
 
-schedule.every(dump_frequency_sec).seconds.do(dump)
-while True:
-    schedule.run_pending()
+def run():
+    if not is_stable:
+        logging.debug("Dropping DB")
+        Base.metadata.drop_all(engine)
+        logging.debug("Databases DB")
+
+    logging.debug("Creating DB")
+    Base.metadata.create_all(engine, checkfirst=True)
+    logging.debug("Database DB")
+    schedule.every(dump_frequency_sec).seconds.do(dump)
+    while True:
+        schedule.run_pending()
+
+
+server = Flask(__name__)
+
+
+@server.route("/health_check")
+def health_check():
+    return "started"
+
+
+if __name__ == "__main__":
+    p = Process(target=run)
+    p.start()
+    port = int(os.environ.get('PORT', 8050))
+    server.run(host='0.0.0.0', port=port)
