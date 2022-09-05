@@ -12,7 +12,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 import schedule
 import logging
-from order_collector.config import is_stable, dump_frequency_sec
+from config import is_stable, dump_frequency_sec
 
 engine = create_engine(os.environ.get("BD_CONNECTION"), echo=True, future=True)
 
