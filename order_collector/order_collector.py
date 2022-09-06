@@ -100,15 +100,11 @@ def run():
         schedule.run_pending()
 
 
+p = Process(target=run)
+p.start()
 server = Flask(__name__)
 
 
 @server.route("/")
 def health_check():
     return "started"
-
-
-p = Process(target=run)
-p.start()
-port = int(os.environ.get('PORT', 8050))
-server.run(host='0.0.0.0', port=port)
