@@ -75,7 +75,7 @@ def get_all_advs(asset, fiat, type, banks=None):
             return res
 
 
-def dump():
+def dump(engine):
     with Session(engine) as session:
         logging.debug("Start committing to DB")
 
@@ -86,7 +86,7 @@ def dump():
         logging.debug("Commited to DB")
 
 
-def run():
+def run(engine):
     if not is_stable:
         logging.debug("Dropping DB")
         Base.metadata.drop_all(engine)
@@ -95,12 +95,12 @@ def run():
     logging.debug("Creating DB")
     Base.metadata.create_all(engine, checkfirst=True)
     logging.debug("Database DB")
-    schedule.every(dump_frequency_sec).seconds.do(dump)
+    schedule.every(dump_frequency_sec).seconds.do(dump, engine=engine)
     while True:
         schedule.run_pending()
 
 
-p = Process(target=run)
+p = Process(target=run, args=(engine,))
 p.start()
 server = Flask(__name__)
 
