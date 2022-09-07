@@ -41,7 +41,7 @@ jobs:
       - name: Scale heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku ps:scale coin-order-collector=1 --app coin-order-collector
+        run: heroku ps:scale web=1 --app coin-order-collector
 
 
 
