@@ -1,6 +1,7 @@
 import os
 from multiprocessing import Process
 
+import psutil
 from flask import Flask
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
