@@ -41,9 +41,14 @@ def run():
 
 p = Process(target=run)
 p.start()
+pid = p.pid
 server = Flask(__name__)
 
 
 @server.route("/")
 def health_check():
-    return p.is_alive()
+    if psutil.pid_exists(pid):
+        return"a process with pid %d exists" % pid
+    else:
+        return "a process with pid %d does not exist" % pid
+
