@@ -8,8 +8,7 @@ from dash.dependencies import Input, Output
 from sqlalchemy import create_engine
 import pandas as pd
 
-engine = create_engine("postgresql://fezjdnvz:TuwZaCWfkD2xz3QTVhf1wOSQ6DZ9hh3x@abul.db.elephantsql.com/fezjdnvz",
-                       echo=True, future=True)
+engine = create_engine(os.environ.get("BD_CONNECTION"), echo=True, future=True)
 df = pd.read_sql('prices', engine.connect())
 df['weighted_price'] = df['price'] * df['tradable_quantity']
 df = df.groupby(pd.Grouper(key='created_at', freq='60s')).agg({'price': ['min', 'max'],
@@ -52,8 +51,3 @@ def graph_update(dropdown_value):
                       yaxis_title='Values'
                       )
     return fig
-
-
-if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 8050))
-    app.run(host='0.0.0.0', port=port)

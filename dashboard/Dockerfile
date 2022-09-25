@@ -17,7 +17,7 @@ RUN chgrp -R 0 /dashboard \
     && pip install pip --upgrade \
     && pip install -r requirements.txt
 
-CMD gunicorn --bind 0.0.0.0:$PORT dashboard:server --preload
+CMD gunicorn --bind 0.0.0.0:$PORT dashboard:server --preload --log-level info
 
 
 
