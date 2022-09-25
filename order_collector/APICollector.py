@@ -4,6 +4,7 @@ import requests
 
 from Order import Order
 from BaseCollector import BaseCollector
+from config import page_limit
 
 
 class APICollector(BaseCollector):
@@ -46,7 +47,7 @@ class APICollector(BaseCollector):
                 raise RuntimeError('err')
         while True:
             advs = APICollector.get_page_advertisments(asset=asset, fiat=fiat, type=type, page=page, banks=banks)
-            if advs:
+            if advs and page <= page_limit:
                 res.extend(advs)
                 page += 1
             else:

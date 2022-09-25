@@ -1,8 +1,4 @@
 import os
-from multiprocessing import Process
-
-import psutil
-from flask import Flask
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 import schedule
@@ -10,18 +6,40 @@ import logging
 from config import is_stable, dump_frequency_sec
 from APICollector import APICollector
 from consts import Base
+import config
+
+
+def get_all_advs(asset_list, fiats_list, types):
+    # Todo multithreading
+    res = []
+    for asset in asset_list:
+        for fiat in fiats_list:
+            for type in types:
+                res.extend(APICollector.get_all_advs(asset, fiat, type))
+    return res
 
 
 def dump(engine):
     with Session(engine) as session:
         logging.debug("Start committing to DB")
-
-        all_advs = APICollector.get_all_advs("USDT", "RUB", 'BUY')
+        all_advs = get_all_advs(config.asset_list, config.fiats_list, config.types)
         print(len(all_advs))
         logging.debug(f"adding {all_advs} advs")
         session.add_all(all_advs)
         session.commit()
         logging.debug("Commited to DB")
+
+
+#def dump(engine):
+#    with Session(engine) as session:
+#        logging.debug("Start committing to DB")
+#
+#        all_advs = APICollector.get_all_advs("USDT", "RUB", 'BUY')
+#        print(len(all_advs))
+#        logging.debug(f"adding {all_advs} advs")
+#        session.add_all(all_advs)
+#        session.commit()
+#        logging.debug("Commited to DB")
 
 
 def run():
@@ -40,16 +58,4 @@ def run():
         schedule.run_pending()
 
 
-p = Process(target=run)
-p.start()
-pid = p.pid
-server = Flask(__name__)
-
-
-@server.route("/")
-def health_check():
-    if psutil.pid_exists(pid):
-        return"a process with pid %d exists" % pid
-    else:
-        return "a process with pid %d does not exist" % pid
-
+run()
